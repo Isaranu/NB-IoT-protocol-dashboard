@@ -17,7 +17,7 @@ private:
   String _t, _h;
   String _device_id, _token, _packet, _rssi;
   String _response;
+  int wait_resp;
 };
 
 #endif
-
