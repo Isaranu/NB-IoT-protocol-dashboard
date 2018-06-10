@@ -10,7 +10,6 @@ AIS_NB_BC95 AISnb;
 const long interval = 20;  /* set delay loop second */
 unsigned long previousMillis = 0;
 
-long cnt = 0;
 void setup()
 { 
   AISnb.debug = true;
@@ -30,9 +29,7 @@ void loop()
 { 
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval*1000)
-    {
-      cnt++;
-           
+    {           
       /* Send string message to UDP protocol */
       UDPSend udp = AISnb.sendUDPmsgStr(serverIP, serverPort, udpData);
 
