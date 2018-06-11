@@ -1,0 +1,369 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>NB-IoT protocol and Dashboard - code.isaranu.com</title>
+<meta charset="UTF-8">
+<!--meta name="viewport" content="width=device-width, initial-scale=1"-->
+
+<!-- Import CSS file -->
+<link rel="stylesheet" href="./src/css/w3.css">
+<link rel="stylesheet" href="./src/css/iottweet_widget.css">
+
+  <style>
+    /* set other style */
+    img{
+      margin-left: 10px;
+      margin-top: 20px;
+      margin-right: 10px;
+    }
+    .span-credit{
+      font-size: 12px;
+      color: #444444;
+    }
+    .widget-control-btn{
+      position: absolute;
+      font-size: 12px;
+      padding: 3px;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+      color: #ccc;
+    }
+    #unlock_widget_btn{
+      right: 5px;
+      top: 5px;
+    }
+    #lock_widget_btn{
+      right: 5px;
+      top: 40px;
+    }
+    #simulation_btn{
+      right: 5px;
+      top: 75px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Header -->
+  <div class="w3-row" style="background-color: black;">
+    <h2 style="color: white;" align="center">NB-IoT dashboard</h2>
+    <div align="center">
+      <img src="./src/img/ais_logo.png" width="50" height="50" alt="ais-logo">
+      <img src="./src/img/tee_logo.png" width="120" height="50" alt="iottweet-logo">
+      <img src="./src/img/iottweet_logo.png" width="50" height="50" alt="tee-logo">
+    </div>
+    <div align="center" style="margin-top: 10px;">
+      <span class="span-credit" align="center">dashboard widget powered by <a href="https://www.iottweet.com" target="_blank">IoTtweet.com</a></span>
+    </div>
+  </div>
+
+  <!-- Button panel -->
+  <button class="w3-button widget-control-btn" id="unlock_widget_btn">unlock widget</button>
+  <button class="w3-button widget-control-btn" id="lock_widget_btn">lock widget</button>
+  <button class="w3-button widget-control-btn" id="simulation_btn">simulation</button>
+
+  <!-- Area for widget creating -->
+  <div id="main_dashboard"></div>
+
+<!-- Import JavaScript library -->
+<script src="./src/js/jquery-3.0.0.min.js"></script>
+<script src="./src/js/jquery-ui.1.12.1.min.js"></script>
+<script src="./src/js/Chart.min.js"></script>
+<script src="./src/js/justgage.js"></script>
+<script src="./src/js/raphael-2.1.4.min.js"></script>
+<script src="./src/js/moment.js"></script>
+<script src="./src/js/iottweet_widget.js"></script>
+
+<script>
+
+    // Use for Simulation only
+    var t_dataset = [23.5,20,30,20,22.5,25.5,23.5,23,24.5,22];
+    var h_dataset = [66.7,65.6,65,68,69,66.5,67.7,69.9,68.9,66];
+    var timeset = [
+      '10 mins ago',
+      '9 mins ago',
+      '8 mins ago',
+      '7 mins ago',
+      '6 mins ago',
+      '5 mins ago',
+      '4 mins ago',
+      '3 mins ago',
+      '2 mins ago',
+      '1 min ago'
+    ];
+    var rssi_dataset = [-89,-90,-91,-87,-92,-92,-87,-88,-90,-98];
+    var device_id = 'mydevice 01';
+
+
+    /* Chart of Temperature */
+    createChart({
+      chartTitle: 'Temperature',
+      chartWidth: 400,
+      chartHeight: 200,
+      yaxisLabel: 'celcius',
+      yMin: 10,
+      yMax: 50,
+      gridXdisplay: true,
+      gridYdisplay: true,
+      ChartSpawnPosition: 'main_dashboard',
+      type: 'bar',
+      lineColor: "rgb(236, 167, 44)",
+      fillColor: "rgba(236, 167, 44, 0.7)",
+      yData: t_dataset,
+      xData: timeset,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* Chart of Humidity */
+    createChart({
+      chartTitle: 'Humidity',
+      chartWidth: 400,
+      chartHeight: 200,
+      yaxisLabel: '% RH',
+      yMin: 0,
+      yMax: 100,
+      gridXdisplay: true,
+      gridYdisplay: true,
+      ChartSpawnPosition: 'main_dashboard',
+      type: 'line',
+      lineColor: "rgb(199, 255, 237)",
+      fillColor: "rgba(199, 255, 237, 0.5)",
+      yData: h_dataset,
+      xData: timeset,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* Chart of RSSI history */
+    createChart({
+      chartTitle: 'RSSI level history',
+      chartWidth: 400,
+      chartHeight: 200,
+      yaxisLabel: 'dbm',
+      yMin: -200,
+      yMax: 0,
+      gridXdisplay: true,
+      gridYdisplay: true,
+      ChartSpawnPosition: 'main_dashboard',
+      type: 'line',
+      lineColor: "rgb(209, 69, 60)",
+      fillColor: "rgba(209, 69, 60, 0.7)",
+      yData: rssi_dataset,
+      xData: timeset,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    console.log('chart[] length : ' + chart.length);
+    console.log('spawnChartCanvas[] length : ' + spawnChartCanvas.length);
+
+    /* Gauge of Temperature */
+    createGauge({
+      gaugeTitle: 'อุณหภูมิ',
+      gaugeWidth: 200,
+      gaugeHeight: 120,
+      gaugeTitleFontSize: 10,
+      gaugeTitleFontColor: 'rgb(190, 183, 164)',
+      gaugeValueFontColor: 'rgb(190, 183, 164)',
+      initialValue: t_dataset[9],
+      minScale: 10,
+      maxScale: 50,
+      GaugeSpawnPosition: 'main_dashboard',
+      reverseScale: false,
+      unitName: 'องศาเซลเซียส',
+      symbol:' c',
+      pointer: true,
+      scaleWidth: 0.2,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* Gauge of Humidity */
+    createGauge({
+      gaugeTitle: 'ความชื้น',
+      gaugeWidth: 200,
+      gaugeHeight: 120,
+      gaugeTitleFontSize: 10,
+      gaugeTitleFontColor: 'rgb(190, 183, 164)',
+      gaugeValueFontColor: 'rgb(190, 183, 164)',
+      initialValue: h_dataset[9],
+      minScale: 0,
+      maxScale: 100,
+      GaugeSpawnPosition: 'main_dashboard',
+      reverseScale: false,
+      unitName: ' % RH',
+      symbol:' %',
+      pointer: true,
+      scaleWidth: 0.2,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    console.log('gauge[] length : ' + gauge.length);
+    console.log('spawnGaugeCanvas[] length : ' + spawnGaugeCanvas.length);
+
+    /* Label value RSSI */
+    createLabelValue({
+      labelValueTitle: 'Current RSSI level',
+      labelValueTitleColor: 'rgb(198,198,198)',
+      labelValueWidth: 200,
+      labelValueHeight: 70,
+      labelValueSpawnPosition: 'main_dashboard',
+      labelValueTxt: rssi_dataset[9],
+      labelValueUnit: ' dbm',
+      labelValueUnitColor: 'rgb(198,198,198)',
+      labelValueFontColor: 'rgb(190, 183, 164)',
+      labelValueFontSize: 30,
+      labelValueBGcolor: 'rgb(71,71,71)',
+      //theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* Label value Device ID */
+    createLabelValue({
+      labelValueTitle: 'Device ID',
+      labelValueTitleColor: 'rgb(198,198,198)',
+      labelValueWidth: 200,
+      labelValueHeight: 70,
+      labelValueSpawnPosition: 'main_dashboard',
+      labelValueTxt: device_id,
+      labelValueUnit: ' ID name',
+      labelValueUnitColor: 'rgb(198,198,198)',
+      labelValueFontColor: 'rgb(190, 183, 164)',
+      labelValueFontSize: 18,
+      labelValueBGcolor: 'rgb(71,71,71)',
+      //theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* Mixed chart : Temperature vs Humidity */
+    createMixedChart({
+      type: 'line',
+      ChartSpawnPosition: 'main_dashboard',
+      chartWidth: 400,
+      chartHeight: 200,
+      yMin: 10,
+      yMax: 100,
+      gridXdisplay: true,
+      gridYdisplay: true,
+      yaxisLabel: 'random number',
+      xData: timeset,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center',
+      chart1:{
+        chartTitle: 'Temperature',
+        lineColor: "rgb(236, 167, 44)",
+        fillColor: "rgba(236, 167, 44, 0.3)",
+        yData: t_dataset
+      },
+      chart2:{
+        chartTitle: 'Humidity',
+        lineColor: "rgb(199, 255, 237)",
+        fillColor: "rgba(199, 255, 237, 0.5)",
+        yData: h_dataset
+      }
+    });
+
+    /* Set position of each widget */
+    /* setPosition(widget type, widget id, left, top) */
+    setPosition('chart', 0, 215, 180);
+    setPosition('chart', 1, 215, 410);
+    setPosition('chart', 2, 840, 410);
+    setPosition('gauge', 0, 640, 180);
+    setPosition('gauge', 1, 640 ,315);
+    setPosition('label value', 0, 640, 460);
+    setPosition('label value', 1, 640, 550);
+    setPosition('mixed chart', 0, 840, 180);
+
+    /* Lock all widget */
+    lockWidget();
+
+    /* ---- End Process ----*/
+
+    /* Simulation update chart, gauge */
+    $('#simulation_btn').click(function(){
+
+        console.log('updated !');
+
+        /*
+        updateChart({
+          chart_widget_id: 0,
+          yData: [50,40,30,20,10],
+          xData: ['hi1','hi2','hi3','hi4','hi5']
+        });
+
+        updateChart({
+          chart_widget_id: 1,
+          yData: [50,40,30,20,10],
+          xData: ['hey','hey','hey','hi','hi']
+        });
+
+        updateChart({
+          chart_widget_id: 2,
+          yData: [50,40,30,20,10],
+          xData: ['ok','ok','ok','hi','hi']
+        });
+
+        updateGauge({
+          gauge_widget_id: 0,
+          Data: 12.3
+        });
+
+        updateGauge({
+          gauge_widget_id: 1,
+          Data: 22.3
+        });
+
+        updateLabelValue({
+          label_widget_id: 0,
+          Data: 'High'
+        });
+
+        updateLabelValue({
+          label_widget_id: 1,
+          Data: -30.5
+        });
+
+        updateMixedChart({
+          mixed_chart_widget_id: 0,
+          yData_1: [50,40,30,20,10,10,10,10,10,10],
+          yData_2: [90,80,70,80,70,80,90,80,70,60],
+          xData: ['10','9','8','7','6','5','4','3','2','1']
+        });
+
+        updateMixedChart({
+          mixed_chart_widget_id: 1,
+          yData_1: [50,40,30,20,10,10,10,10,10,10],
+          yData_2: [90,80,70,80,70,80,90,80,70,60],
+          xData: ['10','9','8','7','6','5','4','3','2','1']
+        });
+        */
+
+    });
+
+    /* Unlock widget */
+    $('#unlock_widget_btn').click(function(){
+      unlockWidget();
+    });
+
+    /* Lock widget */
+    $('#lock_widget_btn').click(function(){
+      lockWidget();
+    });
+
+</script>
+
+</body>
+</html>
