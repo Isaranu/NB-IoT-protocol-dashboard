@@ -45,6 +45,9 @@ canvas{
 .dark-gauge{
   background-color: black;
 }
+.oakwood-gauge{
+  background-color: rgb(33, 18, 0);
+}
 .pos-label-span{
   position: relative;
   font-size: 10px;
