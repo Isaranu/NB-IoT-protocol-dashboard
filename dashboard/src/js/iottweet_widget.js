@@ -131,6 +131,11 @@ function createChart(_jsonChartParams){
         _gridlinecolor = '#232323';
         spawnChartCanvas[_numChart].style.backgroundColor = 'black';
       break;
+    case 'oakwood':
+        _fontcolor = '#727272';
+        _gridlinecolor = '#232323';
+        spawnChartCanvas[_numChart].style.backgroundColor = 'rgb(33, 18, 0)';
+      break;
     default:
         _fontcolor = '#5e5e5e';
         _gridlinecolor = '#ededed';
@@ -363,6 +368,10 @@ function createGauge(_jsonGaugeParams){
         spawnGaugeCanvas[_numGauge].classList.add('dark-gauge');
         _pointerColor = '#ccc';
       break;
+    case 'oakwood':
+        spawnGaugeCanvas[_numGauge].classList.add('oakwood-gauge');
+        _pointerColor = '#ccc';
+      break;
     default:
         spawnGaugeCanvas[_numGauge].classList.add('light-gauge');
         _pointerColor = '#ccc';
@@ -525,11 +534,11 @@ function createLabelValue(_jsonLabelValueParams){
   lbv_val[_numLabelValue] = document.createElement('span');
   lbv_val[_numLabelValue].className = 'lbv-val-txt';
   lbv_val[_numLabelValue].id = 'lbv_val' + _numLabelValue;
-  var lbv_val_initTxt = document.createTextNode('value');
+  var lbv_val_initTxt = document.createTextNode(_labelValueTxt);
 
     // Set position of value display
     lbv_val[_numLabelValue].style.left = String(Number(_labelValueWidth)*0.25) + 'px';
-    lbv_val[_numLabelValue].style.bottom = String(Number(_labelValueHeight)*0.25) + 'px';
+    lbv_val[_numLabelValue].style.bottom = String(Number(_labelValueHeight)*0.15) + 'px';
 
     // Set value font size
     lbv_val[_numLabelValue].style.fontSize = String(Number(_labelValueFontSize)) + 'px';
