@@ -4,14 +4,13 @@
 }
 .grid{
   background-size: 10px 10px;
-  background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom, grey 1px, transparent 1px);
+  background-image: linear-gradient(to right, #595959 1px, transparent 1px), linear-gradient(to bottom, #595959 1px, transparent 1px);
   background-color: #444444;
 }
 body{
-  /*background-size: 10px 10px;
-  background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom, grey 1px, transparent 1px);
-
-  background-color: #444444;*/
+  background-size: 10px 10px;
+  background-image: linear-gradient(to right, #595959 1px, transparent 1px), linear-gradient(to bottom, #595959 1px, transparent 1px);
+  background-color: #444444;
 }
 .bevelBox{
   width: 200px;
