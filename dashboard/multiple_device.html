@@ -95,6 +95,8 @@
     var device_id = ['mydevice_01','mydevice_02'];
     var dataSize = 30;
 
+    var latestUpdated_01, latestUpdated_02;
+
     /* 2. Start read dat from DB */
     getData(device_id[0], dataSize);
     getData(device_id[1], dataSize);
@@ -122,8 +124,8 @@
       },
       chart2:{
         chartTitle: 'Humidity',
-        lineColor: "rgb(199, 255, 237)",
-        fillColor: "rgba(199, 255, 237, 0.5)",
+        lineColor: "rgb(32, 166, 178)",
+        fillColor: "rgba(32, 166, 178, 0.5)",
         yData: h_dataset
       }
     });
@@ -331,7 +333,7 @@
       labelValueHeight: 70,
       labelValueSpawnPosition: 'main_dashboard',
       labelValueTxt: device_id[0],
-      labelValueUnit: ' ID name',
+      labelValueUnit: '',
       labelValueUnitColor: 'rgb(198,198,198)',
       labelValueFontColor: 'rgb(190, 183, 164)',
       labelValueFontSize: 18,
@@ -349,10 +351,46 @@
       labelValueHeight: 70,
       labelValueSpawnPosition: 'main_dashboard',
       labelValueTxt: device_id[1],
-      labelValueUnit: ' ID name',
+      labelValueUnit: '',
       labelValueUnitColor: 'rgb(198,198,198)',
       labelValueFontColor: 'rgb(190, 183, 164)',
       labelValueFontSize: 18,
+      labelValueBGcolor: 'rgb(71,71,71)',
+      //theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create Label value LATEST UPDATE : mydevice_01 */
+    createLabelValue({
+      labelValueTitle: 'Device 1 ข้อมูลล่าสุดเมื่อ',
+      labelValueTitleColor: 'rgb(198,198,198)',
+      labelValueWidth: 150,
+      labelValueHeight: 70,
+      labelValueSpawnPosition: 'main_dashboard',
+      labelValueTxt: '',
+      labelValueUnit: '',
+      labelValueUnitColor: 'rgb(198,198,198)',
+      labelValueFontColor: 'rgb(190, 183, 164)',
+      labelValueFontSize: 12,
+      labelValueBGcolor: 'rgb(71,71,71)',
+      //theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create Label value LATEST UPDATE : mydevice_02 */
+    createLabelValue({
+      labelValueTitle: 'Device 2 ข้อมูลล่าสุดเมื่อ',
+      labelValueTitleColor: 'rgb(198,198,198)',
+      labelValueWidth: 150,
+      labelValueHeight: 70,
+      labelValueSpawnPosition: 'main_dashboard',
+      labelValueTxt: '',
+      labelValueUnit: '',
+      labelValueUnitColor: 'rgb(198,198,198)',
+      labelValueFontColor: 'rgb(190, 183, 164)',
+      labelValueFontSize: 12,
       labelValueBGcolor: 'rgb(71,71,71)',
       //theme: 'light',
       spawnAnimate: true,
@@ -363,23 +401,26 @@
 
     /* 11. Set position of each widget */
     /* setPosition(widget type, widget id, left, top) */
-    setPosition('mixed chart', 0, 305, 320); // Mixed chart [T vs H]: mydevice_01
-    setPosition('mixed chart', 1, 985, 320); // Mixed chart [T vs H]: mydevice_02
+    setPosition('mixed chart', 0, 125, 470); // Mixed chart [T vs H]: mydevice_01
+    setPosition('mixed chart', 1, 810, 470); // Mixed chart [T vs H]: mydevice_02
 
-    setPosition('chart', 0, -5, 320);   // Rssi chart : mydevice_01
-    setPosition('chart', 1, 675, 320);  // Rssi chart : mydevice_02
+    setPosition('chart', 0, 125, 310);   // Rssi chart : mydevice_01
+    setPosition('chart', 1, 810, 310);  // Rssi chart : mydevice_02
 
-    setPosition('gauge', 0, 10, 180);   // Temp gauge : mydevice_01
-    setPosition('gauge', 1, 220, 180);  // Humid gauge : mydevice_01
+    setPosition('gauge', 0, 160, 180);   // Temp gauge : mydevice_01
+    setPosition('gauge', 1, 370, 180);  // Humid gauge : mydevice_01
 
-    setPosition('gauge', 2, 885, 180);  // Temp gauge : mydevice_02
-    setPosition('gauge', 3, 1095, 180); // Humid gauge : mydevice_02
+    setPosition('gauge', 2, 685, 180);  // Temp gauge : mydevice_02
+    setPosition('gauge', 3, 895, 180); // Humid gauge : mydevice_02
 
-    setPosition('label value', 0, 430, 250); // Rssi label : mydevice_01
-    setPosition('label value', 1, 725, 250); // Rssi label : mydevice_02
+    setPosition('label value', 0, 445, 400); // Rssi label : mydevice_01
+    setPosition('label value', 1, 660, 400); // Rssi label : mydevice_02
 
-    setPosition('label value', 2, 430, 175); // Device name label : mydevice_01
-    setPosition('label value', 3, 725, 175); // Device name label : mydevice_02
+    setPosition('label value', 2, 445, 320); // Device name label : mydevice_01
+    setPosition('label value', 3, 660, 320); // Device name label : mydevice_02
+
+    setPosition('label value', 4, 445, 480); // Latest update : mydevice_01
+    setPosition('label value', 5, 660, 480); // Latest update : mydevice_02
 
     /* 12. Lock all widget */
     lockWidget();
@@ -449,6 +490,9 @@ function parseData(_chkDevId, _strData){
   switch (_chkDevId) {
     case device_id[0]:
 
+    /* Set updated time for device 1 */
+    latestUpdated_01 = timeset[timeset.length-1];
+
     updateMixedChart({
       mixed_chart_widget_id: 0,
       yData_1: t_dataset,
@@ -481,6 +525,10 @@ function parseData(_chkDevId, _strData){
 
       break;
     case device_id[1]:
+
+    /* Set updated time for device 2 */
+    latestUpdated_02 = timeset[timeset.length-1];
+
     updateMixedChart({
       mixed_chart_widget_id: 1,
       yData_1: t_dataset,
@@ -508,11 +556,22 @@ function parseData(_chkDevId, _strData){
       label_widget_id: 3,
       Data: device_id[1]
     });
+
       break;
     default:
       //.. nothing
       console.log('cannot compare');
   }
+
+  /* Update LATEST information */
+  updateLabelValue({
+    label_widget_id: 4,
+    Data: moment(latestUpdated_01,'MMM Do YY, h:mm:ss a').fromNow()
+  });
+  updateLabelValue({
+    label_widget_id: 5,
+    Data: moment(latestUpdated_02,'MMM Do YY, h:mm:ss a').fromNow()
+  });
 
 }
 
