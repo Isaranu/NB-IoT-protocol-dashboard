@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -37,10 +36,6 @@
       right: 5px;
       top: 40px;
     }
-    #simulation_btn{
-      right: 5px;
-      top: 75px;
-    }
   </style>
 
 </head>
@@ -63,7 +58,6 @@
   <!-- Button panel -->
   <button class="w3-button widget-control-btn" id="unlock_widget_btn">unlock widget</button>
   <button class="w3-button widget-control-btn" id="lock_widget_btn">lock widget</button>
-  <button class="w3-button widget-control-btn" id="simulation_btn">simulation</button>
 
   <!-- Area for widget creating -->
   <div id="main_dashboard"></div>
@@ -79,26 +73,18 @@
 
 <script>
 
-    // Use for Simulation only
-    var t_dataset = [23.5,20,30,20,22.5,25.5,23.5,23,24.5,22];
-    var h_dataset = [66.7,65.6,65,68,69,66.5,67.7,69.9,68.9,66];
-    var timeset = [
-      '10 mins ago',
-      '9 mins ago',
-      '8 mins ago',
-      '7 mins ago',
-      '6 mins ago',
-      '5 mins ago',
-      '4 mins ago',
-      '3 mins ago',
-      '2 mins ago',
-      '1 min ago'
-    ];
-    var rssi_dataset = [-89,-90,-91,-87,-92,-92,-87,-88,-90,-98];
-    var device_id = 'mydevice 01';
+    /* 1. Declare variable */
+    var t_dataset = [];
+    var h_dataset = [];
+    var timeset = [];
+    var rssi_dataset = [];
+    var device_id = 'mydevice_01';
+    var dataSize = 30;
 
+    /* 2. Start read dat from DB */
+    getData(device_id, dataSize);
 
-    /* Chart of Temperature */
+    /* 3. Create Chart of Temperature */
     createChart({
       chartTitle: 'Temperature',
       chartWidth: 400,
@@ -119,7 +105,7 @@
       spawnPoint: 'center'
     });
 
-    /* Chart of Humidity */
+    /* 4. create chart of Humidity */
     createChart({
       chartTitle: 'Humidity',
       chartWidth: 400,
@@ -140,7 +126,7 @@
       spawnPoint: 'center'
     });
 
-    /* Chart of RSSI history */
+    /* 5. create chart of RSSI history */
     createChart({
       chartTitle: 'RSSI level history',
       chartWidth: 400,
@@ -161,10 +147,7 @@
       spawnPoint: 'center'
     });
 
-    console.log('chart[] length : ' + chart.length);
-    console.log('spawnChartCanvas[] length : ' + spawnChartCanvas.length);
-
-    /* Gauge of Temperature */
+    /* 6. create gauge of Temperature */
     createGauge({
       gaugeTitle: 'อุณหภูมิ',
       gaugeWidth: 200,
@@ -172,7 +155,7 @@
       gaugeTitleFontSize: 10,
       gaugeTitleFontColor: 'rgb(190, 183, 164)',
       gaugeValueFontColor: 'rgb(190, 183, 164)',
-      initialValue: t_dataset[9],
+      initialValue: 0,
       minScale: 10,
       maxScale: 50,
       GaugeSpawnPosition: 'main_dashboard',
@@ -186,7 +169,7 @@
       spawnPoint: 'center'
     });
 
-    /* Gauge of Humidity */
+    /* 7. create gauge of Humidity */
     createGauge({
       gaugeTitle: 'ความชื้น',
       gaugeWidth: 200,
@@ -194,7 +177,7 @@
       gaugeTitleFontSize: 10,
       gaugeTitleFontColor: 'rgb(190, 183, 164)',
       gaugeValueFontColor: 'rgb(190, 183, 164)',
-      initialValue: h_dataset[9],
+      initialValue: 0,
       minScale: 0,
       maxScale: 100,
       GaugeSpawnPosition: 'main_dashboard',
@@ -208,17 +191,14 @@
       spawnPoint: 'center'
     });
 
-    console.log('gauge[] length : ' + gauge.length);
-    console.log('spawnGaugeCanvas[] length : ' + spawnGaugeCanvas.length);
-
-    /* Label value RSSI */
+    /* 8. create Label value RSSI */
     createLabelValue({
       labelValueTitle: 'Current RSSI level',
       labelValueTitleColor: 'rgb(198,198,198)',
       labelValueWidth: 200,
       labelValueHeight: 70,
       labelValueSpawnPosition: 'main_dashboard',
-      labelValueTxt: rssi_dataset[9],
+      labelValueTxt: '-',
       labelValueUnit: ' dbm',
       labelValueUnitColor: 'rgb(198,198,198)',
       labelValueFontColor: 'rgb(190, 183, 164)',
@@ -229,7 +209,7 @@
       spawnPoint: 'center'
     });
 
-    /* Label value Device ID */
+    /* 9. create Label value Device ID */
     createLabelValue({
       labelValueTitle: 'Device ID',
       labelValueTitleColor: 'rgb(198,198,198)',
@@ -247,7 +227,7 @@
       spawnPoint: 'center'
     });
 
-    /* Mixed chart : Temperature vs Humidity */
+    /* 10. create Mixed chart : Temperature vs Humidity */
     createMixedChart({
       type: 'line',
       ChartSpawnPosition: 'main_dashboard',
@@ -276,7 +256,7 @@
       }
     });
 
-    /* Set position of each widget */
+    /* 11. Set position of each widget */
     /* setPosition(widget type, widget id, left, top) */
     setPosition('chart', 0, 215, 180);
     setPosition('chart', 1, 215, 410);
@@ -287,81 +267,110 @@
     setPosition('label value', 1, 640, 550);
     setPosition('mixed chart', 0, 840, 180);
 
-    /* Lock all widget */
+    /* 12. Lock all widget */
     lockWidget();
 
-    /* ---- End Process ----*/
+    /* 13. Set looping of data updating */
+    setInterval(function(){
+      getData(device_id, dataSize);
+    },1000);
 
-    /* Simulation update chart, gauge */
-    $('#simulation_btn').click(function(){
+/* ---- End Process ----*/
 
-        console.log('updated !');
-
-        /*
-        updateChart({
-          chart_widget_id: 0,
-          yData: [50,40,30,20,10],
-          xData: ['hi1','hi2','hi3','hi4','hi5']
-        });
-
-        updateChart({
-          chart_widget_id: 1,
-          yData: [50,40,30,20,10],
-          xData: ['hey','hey','hey','hi','hi']
-        });
-
-        updateChart({
-          chart_widget_id: 2,
-          yData: [50,40,30,20,10],
-          xData: ['ok','ok','ok','hi','hi']
-        });
-
-        updateGauge({
-          gauge_widget_id: 0,
-          Data: 12.3
-        });
-
-        updateGauge({
-          gauge_widget_id: 1,
-          Data: 22.3
-        });
-
-        updateLabelValue({
-          label_widget_id: 0,
-          Data: 'High'
-        });
-
-        updateLabelValue({
-          label_widget_id: 1,
-          Data: -30.5
-        });
-
-        updateMixedChart({
-          mixed_chart_widget_id: 0,
-          yData_1: [50,40,30,20,10,10,10,10,10,10],
-          yData_2: [90,80,70,80,70,80,90,80,70,60],
-          xData: ['10','9','8','7','6','5','4','3','2','1']
-        });
-
-        updateMixedChart({
-          mixed_chart_widget_id: 1,
-          yData_1: [50,40,30,20,10,10,10,10,10,10],
-          yData_2: [90,80,70,80,70,80,90,80,70,60],
-          xData: ['10','9','8','7','6','5','4','3','2','1']
-        });
-        */
-
-    });
-
-    /* Unlock widget */
+/*-- EVENT of Button click --*/
+    /* Unlock widget : THIS MODE Widget will draggable*/
     $('#unlock_widget_btn').click(function(){
       unlockWidget();
     });
-
-    /* Lock widget */
+    /* Lock widget : THIS MODE Widget can't dragged */
     $('#lock_widget_btn').click(function(){
       lockWidget();
     });
+
+function getData(_devid, _datasize){
+
+  /* Create path to request data */
+  var path = 'http://35.198.251.35:4001/read/';
+      path += String(_devid);
+      path += '/';
+      path += String(_datasize);
+      path += '?output=jsonp&callback=?';
+
+  /* Call data from DB by use $.getJSON() */
+  $.getJSON(path, function(){
+  }).done(function(data){
+
+    /* Change format object to string */
+    var output = JSON.stringify(data);
+    console.log('output data : ' + output);
+
+    /* Set json format */
+    var output_json = '{"dataset":' + output + '}';
+
+    /* Decode data from DB */
+    parseData(output_json);
+
+  });
+}
+
+function parseData(_strData){
+  var _strToParse = JSON.parse(_strData);
+  var _str_obj = _strToParse.dataset;
+
+  for(var i in _str_obj){
+    t_dataset[i] = _str_obj[i].t;
+    h_dataset[i] = _str_obj[i].h;
+    rssi_dataset[i] = _str_obj[i].rssi;
+    timeset[i] = moment(new Date(Number(_str_obj[i].ts))).format('MMM Do YY, h:mm:ss a');
+  }
+
+  /* Update data in widget */
+  updateChart({
+    chart_widget_id: 0,
+    yData: t_dataset,
+    xData: timeset
+  });
+
+  updateChart({
+    chart_widget_id: 1,
+    yData: h_dataset,
+    xData: timeset
+  });
+
+  updateChart({
+    chart_widget_id: 2,
+    yData: rssi_dataset,
+    xData: timeset
+  });
+
+  updateGauge({
+    gauge_widget_id: 0,
+    Data: t_dataset[dataSize-1]
+  });
+
+  updateGauge({
+    gauge_widget_id: 1,
+    Data: h_dataset[dataSize-1]
+  });
+
+  updateLabelValue({
+    label_widget_id: 0,
+    Data: rssi_dataset[dataSize-1]
+  });
+
+  updateLabelValue({
+    label_widget_id: 1,
+    Data: device_id
+  });
+
+  updateMixedChart({
+    mixed_chart_widget_id: 0,
+    yData_1: t_dataset,
+    yData_2: h_dataset,
+    xData: timeset
+  });
+
+}
 
 </script>
 
