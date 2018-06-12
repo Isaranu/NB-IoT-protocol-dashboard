@@ -82,7 +82,7 @@ function createChart(_jsonChartParams){
   chart_id_button[_numChart].id = 'chart-id-btn' + _numChart;
   (function(_btnNum){
     chart_id_button[_btnNum].addEventListener('click', function(){
-      console.log('chart id : ' + 'ch' + _btnNum);
+      //console.log('chart id : ' + 'ch' + _btnNum);
       alert('chart_widget_id :' + _btnNum);
     }, false);
   })(_numChart);
@@ -97,16 +97,16 @@ function createChart(_jsonChartParams){
 
   // Get initial position of widget
   chart_position['#ch' + _numChart] = $('#ch' + _numChart).position();
-  console.log(chart_position);
+  //console.log(chart_position);
 
   // Set draggable
   var draggable_name = '#ch-block' + _numChart;
   $(draggable_name).draggable({
     grid: [5,5],
     stop: function(){
-      console.log('dragged stop ! ' + draggable_name);
+      //console.log('dragged stop ! ' + draggable_name);
       chart_position[draggable_name] = $(draggable_name).position();
-      console.log(chart_position);
+      //console.log(chart_position);
 
       var chartwidgetInfo = 'L:' + chart_position[draggable_name].left + ',T:' + chart_position[draggable_name].top;
           chartwidgetInfo += ', w:' + setChartWidth + ', h:' + setChartHeight;
@@ -249,9 +249,9 @@ function updateChart(_jsonChartUpdate){
   var chart_yData = chartUpdateParsed.yData;
   var chart_xData = chartUpdateParsed.xData;
 
-  console.log(chart_widget_id);
-  console.log(chart_xData);
-  console.log(chart_yData);
+  //console.log(chart_widget_id);
+  //console.log(chart_xData);
+  //console.log(chart_yData);
 
   chart[chart_widget_id].data.datasets[0].data = chart_yData;
   chart[chart_widget_id].data.labels = chart_xData;
@@ -315,7 +315,7 @@ function createGauge(_jsonGaugeParams){
   gauge_id_button[_numGauge].id = 'gauge-id-btn' + _numGauge;
   (function(_btnNum){
     gauge_id_button[_btnNum].addEventListener('click', function(){
-      console.log('gauge id : ' + 'g' + _btnNum);
+      //console.log('gauge id : ' + 'g' + _btnNum);
       alert('gauge_widget_id : ' + _btnNum);
     }, false);
   })(_numGauge);
@@ -331,20 +331,20 @@ function createGauge(_jsonGaugeParams){
   spawnGaugeCanvas[_numGauge].appendChild(gauge_pos_label[_numGauge]);
   target_spawn_div.appendChild(spawnGaugeCanvas[_numGauge]);
 
-  console.log(spawnGaugeCanvas);
+  //console.log(spawnGaugeCanvas);
 
   // Get initial position of widget
   gauge_position['#g' + _numGauge] = $('#g' + _numGauge).position();
-  console.log(gauge_position);
+  //console.log(gauge_position);
 
   // Set draggable
   var draggable_name = '#g' + _numGauge;
   $(draggable_name).draggable({
     grid: [5,5],
     stop: function(){
-      console.log('dragged stop ! ' + draggable_name);
+      //console.log('dragged stop ! ' + draggable_name);
       gauge_position[draggable_name] = $(draggable_name).position();
-      console.log(gauge_position);
+      //console.log(gauge_position);
 
       var gaugewidgetInfo = 'L:' + gauge_position[draggable_name].left + ',T:' + gauge_position[draggable_name].top;
           gaugewidgetInfo += ', w:' + setGaugeWidth + ', h:' + setGaugeHeight;
@@ -569,11 +569,11 @@ function createLabelValue(_jsonLabelValueParams){
   $(lbvDraggable_name).draggable({
     grid: [5,5],
     stop: function(){
-      console.log('dragged stop ! ' + lbvDraggable_name);
+      //console.log('dragged stop ! ' + lbvDraggable_name);
       labelvalue_position[lbvDraggable_name] = $(lbvDraggable_name).position();
-      console.log(labelvalue_position);
+      //console.log(labelvalue_position);
 
-      console.log('label value w: ' + _labelValueWidth);
+      //console.log('label value w: ' + _labelValueWidth);
 
       var lbvwidgetInfo = 'L:' + labelvalue_position[lbvDraggable_name].left + ',T:' + labelvalue_position[lbvDraggable_name].top;
           lbvwidgetInfo += ', w:' + lbv_width + ', h:' + lbv_height;
@@ -679,7 +679,7 @@ function createMixedChart(_jsonMixedChartParams){
   mixedChart_buff_div[_numMixedChart].className = 'chartframe';
     var setChartWidth = _chartWidth + 'px';
     var setChartHeight = _chartHeight + 'px';
-    console.log('mix size : ' + setChartWidth + ',' + setChartHeight);
+    //console.log('mix size : ' + setChartWidth + ',' + setChartHeight);
     mixedChart_buff_div[_numMixedChart].style.width = setChartWidth;
     mixedChart_buff_div[_numMixedChart].style.height = setChartHeight;
 
@@ -702,7 +702,7 @@ function createMixedChart(_jsonMixedChartParams){
   mixedchart_id_button[_numMixedChart].id = 'chart-mixed-id-btn' + _numMixedChart;
   (function(_btnNum){
     mixedchart_id_button[_btnNum].addEventListener('click', function(){
-      console.log('chart mixed id : ' + 'ch-mixed' + _btnNum);
+      //console.log('chart mixed id : ' + 'ch-mixed' + _btnNum);
       alert('mixed_chart_widget_id :' + _btnNum);
     }, false);
   })(_numMixedChart);
@@ -717,16 +717,16 @@ function createMixedChart(_jsonMixedChartParams){
 
   // Get initial position of widget
   mixedChart_position['#ch-mixed' + _numMixedChart] = $('#ch-mixed' + _numMixedChart).position();
-  console.log(mixedChart_position);
+  //console.log(mixedChart_position);
 
   // Set draggable
   var draggable_name = '#ch-mixed-block' + _numMixedChart;
   $(draggable_name).draggable({
     grid: [5,5],
     stop: function(){
-      console.log('dragged stop ! ' + draggable_name);
+      //console.log('dragged stop ! ' + draggable_name);
       mixedChart_position[draggable_name] = $(draggable_name).position();
-      console.log(mixedChart_position);
+      //console.log(mixedChart_position);
 
       var mixedchartwidgetInfo = 'L:' + mixedChart_position[draggable_name].left + ',T:' + mixedChart_position[draggable_name].top;
           mixedchartwidgetInfo += ', w:' + setChartWidth + ', h:' + setChartHeight;
@@ -865,31 +865,33 @@ function updateMixedChart(_jsonmixedChartUpdate){
   var mixedchartUpdateStr = JSON.stringify(_jsonmixedChartUpdate);
   var mixedchartUpdateParsed = JSON.parse(mixedchartUpdateStr);
 
-  var mixedchart_widget_id = mixedchartUpdateParsed.mixed_chart_widget_id;
+  var mixedchart_widget_id = Number(mixedchartUpdateParsed.mixed_chart_widget_id);
   var mixedchart_yData_1 = mixedchartUpdateParsed.yData_1;
   var mixedchart_yData_2 = mixedchartUpdateParsed.yData_2;
   var mixedchart_xData = mixedchartUpdateParsed.xData;
 
-  console.log('mixed chart id : ' + mixedchart_widget_id);
-  console.log(mixedchart_yData_1);
-  console.log(mixedchart_yData_2);
-  console.log(mixedchart_xData);
+  //console.log('mixed chart id : ' + mixedchart_widget_id);
+  //console.log(mixedchart_yData_1);
+  //console.log(mixedchart_yData_2);
+  //console.log(mixedchart_xData);
 
   var dataset_arr = [];
   var push_index = 0;
   dataset_arr.push(mixedchart_yData_1);
   dataset_arr.push(mixedchart_yData_2);
 
-  console.log(dataset_arr);
+  //console.log(dataset_arr);
 
   var mixedChartData_obj = mixedChart[mixedchart_widget_id].data;
-  for(var i in mixedChartData_obj){
-    mixedChartData_obj.datasets[0].data = dataset_arr[push_index];
+  for(var i=0; i<=1; i++){
+    mixedChartData_obj.datasets[i].data = dataset_arr[push_index];
     push_index++;
   }
 
   mixedChart[mixedchart_widget_id].data.labels = mixedchart_xData;
   mixedChart[mixedchart_widget_id].update();
+
+  //console.log(mixedChart[mixedchart_widget_id]);
 
 }
 
