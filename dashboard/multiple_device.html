@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -12,6 +11,9 @@
 
   <style>
     /* set other style */
+    html{
+      overflow-x: scroll;
+    }
     img{
       margin-left: 10px;
       margin-top: 20px;
@@ -37,10 +39,6 @@
       right: 5px;
       top: 40px;
     }
-    #simulation_btn{
-      right: 5px;
-      top: 75px;
-    }
   </style>
 
 </head>
@@ -48,7 +46,7 @@
 <body>
 
   <!-- Header -->
-  <div class="w3-row" style="background-color: black;">
+  <div class="w3-row" style="background-color:black; width:100%">
     <h2 style="color: white;" align="center">NB-IoT dashboard</h2>
     <div align="center">
       <img src="./src/img/ais_logo.png" width="50" height="50" alt="ais-logo">
@@ -63,7 +61,6 @@
   <!-- Button panel -->
   <button class="w3-button widget-control-btn" id="unlock_widget_btn">unlock widget</button>
   <button class="w3-button widget-control-btn" id="lock_widget_btn">lock widget</button>
-  <button class="w3-button widget-control-btn" id="simulation_btn">simulation</button>
 
   <!-- Area for widget creating -->
   <div id="main_dashboard"></div>
@@ -79,179 +76,63 @@
 
 <script>
 
-    // Use for Simulation only
-    var t_dataset = [23.5,20,30,20,22.5,25.5,23.5,23,24.5,22];
-    var h_dataset = [66.7,65.6,65,68,69,66.5,67.7,69.9,68.9,66];
-    var timeset = [
-      '10 mins ago',
-      '9 mins ago',
-      '8 mins ago',
-      '7 mins ago',
-      '6 mins ago',
-      '5 mins ago',
-      '4 mins ago',
-      '3 mins ago',
-      '2 mins ago',
-      '1 min ago'
-    ];
-    var rssi_dataset = [-89,-90,-91,-87,-92,-92,-87,-88,-90,-98];
-    var device_id = 'mydevice 01';
+    /* 1. Declare variable */
+    var t_dataset = [];
+    var h_dataset = [];
+    var timeset = [];
+    var rssi_dataset = [];
 
+    var t_dataset_01 = [];
+    var h_dataset_01 = [];
+    var timeset_01 = [];
+    var rssi_dataset_01 = [];
 
-    /* Chart of Temperature */
-    createChart({
-      chartTitle: 'Temperature',
-      chartWidth: 400,
-      chartHeight: 200,
-      yaxisLabel: 'celcius',
-      yMin: 10,
-      yMax: 50,
-      gridXdisplay: true,
-      gridYdisplay: true,
-      ChartSpawnPosition: 'main_dashboard',
-      type: 'bar',
-      lineColor: "rgb(236, 167, 44)",
-      fillColor: "rgba(236, 167, 44, 0.7)",
-      yData: t_dataset,
-      xData: timeset,
-      theme: 'dark',
-      spawnAnimate: true,
-      spawnPoint: 'center'
-    });
+    var t_dataset_02 = [];
+    var h_dataset_02 = [];
+    var timeset_02 = [];
+    var rssi_dataset_02 = [];
 
-    /* Chart of Humidity */
-    createChart({
-      chartTitle: 'Humidity',
-      chartWidth: 400,
-      chartHeight: 200,
-      yaxisLabel: '% RH',
-      yMin: 0,
-      yMax: 100,
-      gridXdisplay: true,
-      gridYdisplay: true,
-      ChartSpawnPosition: 'main_dashboard',
-      type: 'line',
-      lineColor: "rgb(199, 255, 237)",
-      fillColor: "rgba(199, 255, 237, 0.5)",
-      yData: h_dataset,
-      xData: timeset,
-      theme: 'dark',
-      spawnAnimate: true,
-      spawnPoint: 'center'
-    });
+    var device_id = ['mydevice_01','mydevice_02'];
+    var dataSize = 30;
 
-    /* Chart of RSSI history */
-    createChart({
-      chartTitle: 'RSSI level history',
-      chartWidth: 400,
-      chartHeight: 200,
-      yaxisLabel: 'dbm',
-      yMin: -200,
-      yMax: 0,
-      gridXdisplay: true,
-      gridYdisplay: true,
-      ChartSpawnPosition: 'main_dashboard',
-      type: 'line',
-      lineColor: "rgb(209, 69, 60)",
-      fillColor: "rgba(209, 69, 60, 0.7)",
-      yData: rssi_dataset,
-      xData: timeset,
-      theme: 'dark',
-      spawnAnimate: true,
-      spawnPoint: 'center'
-    });
+    /* 2. Start read dat from DB */
+    getData(device_id[0], dataSize);
+    getData(device_id[1], dataSize);
 
-    console.log('chart[] length : ' + chart.length);
-    console.log('spawnChartCanvas[] length : ' + spawnChartCanvas.length);
-
-    /* Gauge of Temperature */
-    createGauge({
-      gaugeTitle: 'อุณหภูมิ',
-      gaugeWidth: 200,
-      gaugeHeight: 120,
-      gaugeTitleFontSize: 10,
-      gaugeTitleFontColor: 'rgb(190, 183, 164)',
-      gaugeValueFontColor: 'rgb(190, 183, 164)',
-      initialValue: t_dataset[9],
-      minScale: 10,
-      maxScale: 50,
-      GaugeSpawnPosition: 'main_dashboard',
-      reverseScale: false,
-      unitName: 'องศาเซลเซียส',
-      symbol:' c',
-      pointer: true,
-      scaleWidth: 0.2,
-      theme: 'dark',
-      spawnAnimate: true,
-      spawnPoint: 'center'
-    });
-
-    /* Gauge of Humidity */
-    createGauge({
-      gaugeTitle: 'ความชื้น',
-      gaugeWidth: 200,
-      gaugeHeight: 120,
-      gaugeTitleFontSize: 10,
-      gaugeTitleFontColor: 'rgb(190, 183, 164)',
-      gaugeValueFontColor: 'rgb(190, 183, 164)',
-      initialValue: h_dataset[9],
-      minScale: 0,
-      maxScale: 100,
-      GaugeSpawnPosition: 'main_dashboard',
-      reverseScale: false,
-      unitName: ' % RH',
-      symbol:' %',
-      pointer: true,
-      scaleWidth: 0.2,
-      theme: 'dark',
-      spawnAnimate: true,
-      spawnPoint: 'center'
-    });
-
-    console.log('gauge[] length : ' + gauge.length);
-    console.log('spawnGaugeCanvas[] length : ' + spawnGaugeCanvas.length);
-
-    /* Label value RSSI */
-    createLabelValue({
-      labelValueTitle: 'Current RSSI level',
-      labelValueTitleColor: 'rgb(198,198,198)',
-      labelValueWidth: 200,
-      labelValueHeight: 70,
-      labelValueSpawnPosition: 'main_dashboard',
-      labelValueTxt: rssi_dataset[9],
-      labelValueUnit: ' dbm',
-      labelValueUnitColor: 'rgb(198,198,198)',
-      labelValueFontColor: 'rgb(190, 183, 164)',
-      labelValueFontSize: 30,
-      labelValueBGcolor: 'rgb(71,71,71)',
-      //theme: 'dark',
-      spawnAnimate: true,
-      spawnPoint: 'center'
-    });
-
-    /* Label value Device ID */
-    createLabelValue({
-      labelValueTitle: 'Device ID',
-      labelValueTitleColor: 'rgb(198,198,198)',
-      labelValueWidth: 200,
-      labelValueHeight: 70,
-      labelValueSpawnPosition: 'main_dashboard',
-      labelValueTxt: device_id,
-      labelValueUnit: ' ID name',
-      labelValueUnitColor: 'rgb(198,198,198)',
-      labelValueFontColor: 'rgb(190, 183, 164)',
-      labelValueFontSize: 18,
-      labelValueBGcolor: 'rgb(71,71,71)',
-      //theme: 'light',
-      spawnAnimate: true,
-      spawnPoint: 'center'
-    });
-
-    /* Mixed chart : Temperature vs Humidity */
+    /* create Mixed chart : Temperature vs Humidity : mydevice_01 */
     createMixedChart({
       type: 'line',
       ChartSpawnPosition: 'main_dashboard',
-      chartWidth: 400,
+      chartWidth: 300,
+      chartHeight: 200,
+      yMin: 10,
+      yMax: 100,
+      gridXdisplay: true,
+      gridYdisplay: true,
+      yaxisLabel: 'random number',
+      xData: timeset,
+      theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center',
+      chart1:{
+        chartTitle: 'Temperature',
+        lineColor: "rgb(236, 167, 44)",
+        fillColor: "rgba(236, 167, 44, 0.3)",
+        yData: t_dataset
+      },
+      chart2:{
+        chartTitle: 'Humidity',
+        lineColor: "rgb(199, 255, 237)",
+        fillColor: "rgba(199, 255, 237, 0.5)",
+        yData: h_dataset
+      }
+    });
+
+    /* create Mixed chart : Temperature vs Humidity : mydevice_02 */
+    createMixedChart({
+      type: 'line',
+      ChartSpawnPosition: 'main_dashboard',
+      chartWidth: 300,
       chartHeight: 200,
       yMin: 10,
       yMax: 100,
@@ -276,92 +157,364 @@
       }
     });
 
-    /* Set position of each widget */
-    /* setPosition(widget type, widget id, left, top) */
-    setPosition('chart', 0, 215, 180);
-    setPosition('chart', 1, 215, 410);
-    setPosition('chart', 2, 840, 410);
-    setPosition('gauge', 0, 640, 180);
-    setPosition('gauge', 1, 640 ,315);
-    setPosition('label value', 0, 640, 460);
-    setPosition('label value', 1, 640, 550);
-    setPosition('mixed chart', 0, 840, 180);
-
-    /* Lock all widget */
-    lockWidget();
-
-    /* ---- End Process ----*/
-
-    /* Simulation update chart, gauge */
-    $('#simulation_btn').click(function(){
-
-        console.log('updated !');
-
-        /*
-        updateChart({
-          chart_widget_id: 0,
-          yData: [50,40,30,20,10],
-          xData: ['hi1','hi2','hi3','hi4','hi5']
-        });
-
-        updateChart({
-          chart_widget_id: 1,
-          yData: [50,40,30,20,10],
-          xData: ['hey','hey','hey','hi','hi']
-        });
-
-        updateChart({
-          chart_widget_id: 2,
-          yData: [50,40,30,20,10],
-          xData: ['ok','ok','ok','hi','hi']
-        });
-
-        updateGauge({
-          gauge_widget_id: 0,
-          Data: 12.3
-        });
-
-        updateGauge({
-          gauge_widget_id: 1,
-          Data: 22.3
-        });
-
-        updateLabelValue({
-          label_widget_id: 0,
-          Data: 'High'
-        });
-
-        updateLabelValue({
-          label_widget_id: 1,
-          Data: -30.5
-        });
-
-        updateMixedChart({
-          mixed_chart_widget_id: 0,
-          yData_1: [50,40,30,20,10,10,10,10,10,10],
-          yData_2: [90,80,70,80,70,80,90,80,70,60],
-          xData: ['10','9','8','7','6','5','4','3','2','1']
-        });
-
-        updateMixedChart({
-          mixed_chart_widget_id: 1,
-          yData_1: [50,40,30,20,10,10,10,10,10,10],
-          yData_2: [90,80,70,80,70,80,90,80,70,60],
-          xData: ['10','9','8','7','6','5','4','3','2','1']
-        });
-        */
-
+    /* create chart of RSSI history : mydevice_01 */
+    createChart({
+      chartTitle: 'RSSI level history : mydevice_01',
+      chartWidth: 300,
+      chartHeight: 200,
+      yaxisLabel: 'dbm',
+      yMin: -200,
+      yMax: 0,
+      gridXdisplay: true,
+      gridYdisplay: true,
+      ChartSpawnPosition: 'main_dashboard',
+      type: 'line',
+      lineColor: "rgb(209, 69, 60)",
+      fillColor: "rgba(209, 69, 60, 0.7)",
+      yData: rssi_dataset,
+      xData: timeset,
+      theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center'
     });
 
-    /* Unlock widget */
+    /* create chart of RSSI history : mydevice_02 */
+    createChart({
+      chartTitle: 'RSSI level history : mydevice_02',
+      chartWidth: 300,
+      chartHeight: 200,
+      yaxisLabel: 'dbm',
+      yMin: -200,
+      yMax: 0,
+      gridXdisplay: true,
+      gridYdisplay: true,
+      ChartSpawnPosition: 'main_dashboard',
+      type: 'line',
+      lineColor: "rgb(209, 69, 60)",
+      fillColor: "rgba(209, 69, 60, 0.7)",
+      yData: rssi_dataset,
+      xData: timeset,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create gauge of Temperature : mydevice_01 */
+    createGauge({
+      gaugeTitle: 'อุณหภูมิ mydevice_01',
+      gaugeWidth: 200,
+      gaugeHeight: 120,
+      gaugeTitleFontSize: 10,
+      gaugeTitleFontColor: 'rgb(190, 183, 164)',
+      gaugeValueFontColor: 'rgb(190, 183, 164)',
+      initialValue: 0,
+      minScale: 10,
+      maxScale: 50,
+      GaugeSpawnPosition: 'main_dashboard',
+      reverseScale: false,
+      unitName: 'องศาเซลเซียส',
+      symbol:' c',
+      pointer: true,
+      scaleWidth: 0.2,
+      theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create gauge of Humidity : mydevice_01 */
+    createGauge({
+      gaugeTitle: 'ความชื้น mydevice_01',
+      gaugeWidth: 200,
+      gaugeHeight: 120,
+      gaugeTitleFontSize: 10,
+      gaugeTitleFontColor: 'rgb(190, 183, 164)',
+      gaugeValueFontColor: 'rgb(190, 183, 164)',
+      initialValue: 0,
+      minScale: 0,
+      maxScale: 100,
+      GaugeSpawnPosition: 'main_dashboard',
+      reverseScale: false,
+      unitName: ' % RH',
+      symbol:' %',
+      pointer: true,
+      scaleWidth: 0.2,
+      theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create gauge of Temperature : mydevice_02 */
+    createGauge({
+      gaugeTitle: 'อุณหภูมิ mydevice_02',
+      gaugeWidth: 200,
+      gaugeHeight: 120,
+      gaugeTitleFontSize: 10,
+      gaugeTitleFontColor: 'rgb(190, 183, 164)',
+      gaugeValueFontColor: 'rgb(190, 183, 164)',
+      initialValue: 0,
+      minScale: 10,
+      maxScale: 50,
+      GaugeSpawnPosition: 'main_dashboard',
+      reverseScale: false,
+      unitName: 'องศาเซลเซียส',
+      symbol:' c',
+      pointer: true,
+      scaleWidth: 0.2,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create gauge of Humidity : mydevice_02 */
+    createGauge({
+      gaugeTitle: 'ความชื้น mydevice_02',
+      gaugeWidth: 200,
+      gaugeHeight: 120,
+      gaugeTitleFontSize: 10,
+      gaugeTitleFontColor: 'rgb(190, 183, 164)',
+      gaugeValueFontColor: 'rgb(190, 183, 164)',
+      initialValue: 0,
+      minScale: 0,
+      maxScale: 100,
+      GaugeSpawnPosition: 'main_dashboard',
+      reverseScale: false,
+      unitName: ' % RH',
+      symbol:' %',
+      pointer: true,
+      scaleWidth: 0.2,
+      theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create Label value RSSI : mydevice_01 */
+    createLabelValue({
+      labelValueTitle: 'RSSI level : mydevice_01',
+      labelValueTitleColor: 'rgb(198,198,198)',
+      labelValueWidth: 150,
+      labelValueHeight: 70,
+      labelValueSpawnPosition: 'main_dashboard',
+      labelValueTxt: '-',
+      labelValueUnit: ' dbm',
+      labelValueUnitColor: 'rgb(198,198,198)',
+      labelValueFontColor: 'rgb(190, 183, 164)',
+      labelValueFontSize: 30,
+      labelValueBGcolor: 'rgb(71,71,71)',
+      //theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create Label value RSSI : mydevice_02 */
+    createLabelValue({
+      labelValueTitle: 'RSSI level : mydevice_02',
+      labelValueTitleColor: 'rgb(198,198,198)',
+      labelValueWidth: 150,
+      labelValueHeight: 70,
+      labelValueSpawnPosition: 'main_dashboard',
+      labelValueTxt: '-',
+      labelValueUnit: ' dbm',
+      labelValueUnitColor: 'rgb(198,198,198)',
+      labelValueFontColor: 'rgb(190, 183, 164)',
+      labelValueFontSize: 30,
+      labelValueBGcolor: 'rgb(71,71,71)',
+      //theme: 'dark',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create Label value Device ID : mydevice_01 */
+    createLabelValue({
+      labelValueTitle: 'Device ID',
+      labelValueTitleColor: 'rgb(198,198,198)',
+      labelValueWidth: 150,
+      labelValueHeight: 70,
+      labelValueSpawnPosition: 'main_dashboard',
+      labelValueTxt: device_id[0],
+      labelValueUnit: ' ID name',
+      labelValueUnitColor: 'rgb(198,198,198)',
+      labelValueFontColor: 'rgb(190, 183, 164)',
+      labelValueFontSize: 18,
+      labelValueBGcolor: 'rgb(71,71,71)',
+      //theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /* create Label value Device ID : mydevice_02 */
+    createLabelValue({
+      labelValueTitle: 'Device ID',
+      labelValueTitleColor: 'rgb(198,198,198)',
+      labelValueWidth: 150,
+      labelValueHeight: 70,
+      labelValueSpawnPosition: 'main_dashboard',
+      labelValueTxt: device_id[1],
+      labelValueUnit: ' ID name',
+      labelValueUnitColor: 'rgb(198,198,198)',
+      labelValueFontColor: 'rgb(190, 183, 164)',
+      labelValueFontSize: 18,
+      labelValueBGcolor: 'rgb(71,71,71)',
+      //theme: 'light',
+      spawnAnimate: true,
+      spawnPoint: 'center'
+    });
+
+    /*-- SET MIXED CHART --*/
+
+    /* 11. Set position of each widget */
+    /* setPosition(widget type, widget id, left, top) */
+    setPosition('mixed chart', 0, 305, 320); // Mixed chart [T vs H]: mydevice_01
+    setPosition('mixed chart', 1, 985, 320); // Mixed chart [T vs H]: mydevice_02
+
+    setPosition('chart', 0, -5, 320);   // Rssi chart : mydevice_01
+    setPosition('chart', 1, 675, 320);  // Rssi chart : mydevice_02
+
+    setPosition('gauge', 0, 10, 180);   // Temp gauge : mydevice_01
+    setPosition('gauge', 1, 220, 180);  // Humid gauge : mydevice_01
+
+    setPosition('gauge', 2, 885, 180);  // Temp gauge : mydevice_02
+    setPosition('gauge', 3, 1095, 180); // Humid gauge : mydevice_02
+
+    setPosition('label value', 0, 430, 250); // Rssi label : mydevice_01
+    setPosition('label value', 1, 725, 250); // Rssi label : mydevice_02
+
+    setPosition('label value', 2, 430, 175); // Device name label : mydevice_01
+    setPosition('label value', 3, 725, 175); // Device name label : mydevice_02
+
+    /* 12. Lock all widget */
+    lockWidget();
+
+    /* 13. Set looping of data updating */
+    setInterval(function(){
+      getData(device_id[0], dataSize);
+      getData(device_id[1], dataSize);
+    },1000);
+
+/* ---- End Process ----*/
+
+/*-- EVENT of Button click --*/
+    /* Unlock widget : THIS MODE Widget will draggable*/
     $('#unlock_widget_btn').click(function(){
       unlockWidget();
     });
-
-    /* Lock widget */
+    /* Lock widget : THIS MODE Widget can't dragged */
     $('#lock_widget_btn').click(function(){
       lockWidget();
     });
+
+function getData(_devid, _datasize){
+
+  /* Create path to request data */
+  var path = 'http://35.198.251.35:4001/read/';
+      path += String(_devid);
+      path += '/';
+      path += String(_datasize);
+      path += '?output=jsonp&callback=?';
+
+  /* Call data from DB by use $.getJSON() */
+  $.getJSON(path, function(){
+  }).done(function(data){
+
+    /* Change format object to string */
+    var output = JSON.stringify(data);
+    console.log('output data : ' + output);
+
+    /* Set json format */
+    var output_json = '{"dataset":' + output + '}';
+
+    /* Decode data from DB */
+    parseData(_devid, output_json);
+
+  });
+}
+
+function parseData(_chkDevId, _strData){
+  var _strToParse = JSON.parse(_strData);
+  var _str_obj = _strToParse.dataset;
+
+    /* Reset variable */
+    t_dataset = [];
+    h_dataset = [];
+    rssi_dataset = [];
+    timeset = [];
+
+  for(var i in _str_obj){
+    t_dataset[i] = _str_obj[i].t;
+    h_dataset[i] = _str_obj[i].h;
+    rssi_dataset[i] = _str_obj[i].rssi;
+    timeset[i] = moment(new Date(Number(_str_obj[i].ts))).format('MMM Do YY, h:mm:ss a');
+  }
+
+  /* Check device id to feed data */
+  switch (_chkDevId) {
+    case device_id[0]:
+
+    updateMixedChart({
+      mixed_chart_widget_id: 0,
+      yData_1: t_dataset,
+      yData_2: h_dataset,
+      xData: timeset
+    });
+
+    updateChart({
+      chart_widget_id: 0,
+      yData: rssi_dataset,
+      xData: timeset
+    });
+
+    updateGauge({
+      gauge_widget_id: 0,
+      Data: t_dataset[t_dataset.length-1]
+    });
+    updateGauge({
+      gauge_widget_id: 1,
+      Data: h_dataset[h_dataset.length-1]
+    });
+    updateLabelValue({
+      label_widget_id: 0,
+      Data: rssi_dataset[rssi_dataset.length-1]
+    });
+    updateLabelValue({
+      label_widget_id: 2,
+      Data: device_id[0]
+    });
+
+      break;
+    case device_id[1]:
+    updateMixedChart({
+      mixed_chart_widget_id: 1,
+      yData_1: t_dataset,
+      yData_2: h_dataset,
+      xData: timeset
+    });
+    updateChart({
+      chart_widget_id: 1,
+      yData: rssi_dataset,
+      xData: timeset
+    });
+    updateGauge({
+      gauge_widget_id: 2,
+      Data: t_dataset[t_dataset.length-1]
+    });
+    updateGauge({
+      gauge_widget_id: 3,
+      Data: h_dataset[h_dataset.length-1]
+    });
+    updateLabelValue({
+      label_widget_id: 1,
+      Data: rssi_dataset[rssi_dataset.length-1]
+    });
+    updateLabelValue({
+      label_widget_id: 3,
+      Data: device_id[1]
+    });
+      break;
+    default:
+      //.. nothing
+      console.log('cannot compare');
+  }
+
+}
 
 </script>
 
