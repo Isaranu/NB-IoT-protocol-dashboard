@@ -11,6 +11,9 @@
 
   <style>
     /* set other style */
+    html{
+      overflow-x: scroll;
+    }
     img{
       margin-left: 10px;
       margin-top: 20px;
@@ -95,7 +98,7 @@
       gridXdisplay: true,
       gridYdisplay: true,
       ChartSpawnPosition: 'main_dashboard',
-      type: 'bar',
+      type: 'line',
       lineColor: "rgb(236, 167, 44)",
       fillColor: "rgba(236, 167, 44, 0.7)",
       yData: t_dataset,
@@ -258,14 +261,17 @@
 
     /* 11. Set position of each widget */
     /* setPosition(widget type, widget id, left, top) */
-    setPosition('chart', 0, 215, 180);
-    setPosition('chart', 1, 215, 410);
-    setPosition('chart', 2, 840, 410);
-    setPosition('gauge', 0, 640, 180);
-    setPosition('gauge', 1, 640 ,315);
-    setPosition('label value', 0, 640, 460);
-    setPosition('label value', 1, 640, 550);
-    setPosition('mixed chart', 0, 840, 180);
+    setPosition('chart', 0, 0, 170);
+    setPosition('chart', 1, 0, 380);
+    setPosition('chart', 2, 620, 170);
+
+    setPosition('gauge', 0, 420, 170);
+    setPosition('gauge', 1, 420 ,300);
+
+    setPosition('label value', 0, 420, 440);
+    setPosition('label value', 1, 420, 520);
+
+    setPosition('mixed chart', 0, 620, 380);
 
     /* 12. Lock all widget */
     lockWidget();
@@ -290,7 +296,7 @@
 function getData(_devid, _datasize){
 
   /* Create path to request data */
-  var path = 'http://35.198.251.35:4001/read/';
+  var path = 'http://xx.xxx.xxx.xx:4001/read/';
       path += String(_devid);
       path += '/';
       path += String(_datasize);
@@ -345,17 +351,17 @@ function parseData(_strData){
 
   updateGauge({
     gauge_widget_id: 0,
-    Data: t_dataset[dataSize-1]
+    Data: t_dataset[t_dataset.length-1]
   });
 
   updateGauge({
     gauge_widget_id: 1,
-    Data: h_dataset[dataSize-1]
+    Data: h_dataset[h_dataset.length-1]
   });
 
   updateLabelValue({
     label_widget_id: 0,
-    Data: rssi_dataset[dataSize-1]
+    Data: rssi_dataset[rssi_dataset.length-1]
   });
 
   updateLabelValue({
