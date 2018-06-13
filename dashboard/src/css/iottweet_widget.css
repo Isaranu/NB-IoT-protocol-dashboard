@@ -51,7 +51,8 @@ canvas{
 .pos-label-span{
   position: relative;
   font-size: 10px;
-  color: #7a7a7a;
+  /*color: #7a7a7a;*/
+  color: white;
   display: inline-block;
   left: 100px;
   top: -20px;
@@ -60,7 +61,8 @@ canvas{
 .gauge-pos-label-span{
   position: relative;
   font-size: 10px;
-  color: #7a7a7a;
+  /*color: #7a7a7a;*/
+  color: white;
   display: inline-block;
   left: 100px;
   top: -20px;
@@ -108,7 +110,8 @@ canvas{
 .labelValue-pos-label-span{
   position: relative;
   font-size: 10px;
-  color: #7a7a7a;
+  /*color: #7a7a7a;*/
+  color: white;
   display: inline-block;
   left: 10px;
   top: -20px;
