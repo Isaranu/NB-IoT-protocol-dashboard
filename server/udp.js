@@ -26,9 +26,7 @@ var remote_port, remote_address;
 var activeFlag, tokenFlag, cliresp;
 var d, utc;
 
-var diff_utc, diff_utc_sec, diff_utc_min, diff_utc_hr, sec_digit;
-
-/* Start listening connection from IoT */
+/* Start event "listening" connection from IoT */
 server.on("listening", function(){
     var address = server.address();
     console.log("My udp protocol start listen on port " + address.port);
