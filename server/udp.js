@@ -19,12 +19,11 @@ var split = require('split-string');
 /* Setup UDP protocol connection */
 var dgram = require("dgram");
 var server = dgram.createSocket("udp4");
-var HOST = 'x.x.x.x';   /* Server IP address */
 var PORT = 5683;       /* udp port (DEFAULT: 5683) */
 
 var remote_port, remote_address;
-var activeFlag, tokenFlag, cliresp;
-var d, utc;
+var cliresp;
+var d;
 
 /* Start event "listening" connection from IoT */
 server.on("listening", function(){
